@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+	--color-primary:       #1a73e8;
+	--color-primary-hover: #1557b0;
+	--color-primary-light: #e8f0fe;
+	--color-danger:        #d93025;
+	--color-danger-light:  #fce8e6;
+	--color-surface-2:     #f1f3f4;
+	--color-border:        #e0e0e0;
+	--color-border-strong: #bdbdbd;
+	--color-text-muted:    #5f6368;
+
+	--font-sans: 'Google Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+}
