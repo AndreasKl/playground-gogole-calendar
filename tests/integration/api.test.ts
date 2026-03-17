@@ -9,7 +9,7 @@
  * against the shared development database without permanent side effects.
  */
 
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeAll } from 'vitest';
 import type { CalendarEvent, DbCalendar } from '$lib/types';
 
 const BASE = 'http://localhost:5173';
@@ -45,6 +45,22 @@ async function getEventsInWeek(
 	expect(res.ok).toBe(true);
 	return res.json();
 }
+
+beforeAll(async () => {
+	// Delete any orphaned events from previously killed test runs.
+	// Covers the full date range used across all tests.
+	const res = await api('/api/events?start=2026-02-01T00:00:00Z&end=2026-04-01T00:00:00Z');
+	if (res.ok) {
+		const events: CalendarEvent[] = await res.json();
+		const ids = [...new Set(events.map(e => e.id))];
+		for (const id of ids) {
+			await api(`/api/events/${id}`, {
+				method: 'DELETE',
+				body: JSON.stringify({ scope: 'all' }),
+			});
+		}
+	}
+});
 
 afterEach(async () => {
 	// Clean up events created by this test
